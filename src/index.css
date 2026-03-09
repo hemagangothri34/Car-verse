@@ -1,0 +1,107 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 32% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 212 26% 84%;
+
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Custom Car Marketplace Styles */
+  .car-card-gradient {
+    @apply bg-gradient-to-br from-secondary/80 to-background/90 backdrop-blur-sm;
+  }
+  
+  .dashboard-gradient {
+    background: linear-gradient(to bottom right, 
+      rgba(30, 41, 59, 0.8), 
+      rgba(15, 23, 42, 0.95)
+    );
+  }
+  
+  .login-gradient {
+    background: linear-gradient(to bottom right,
+      rgba(30, 41, 59, 0.9),
+      rgba(15, 23, 42, 1)
+    ),
+    url('/car-bg.jpg') no-repeat center center/cover;
+  }
+  
+  /* Filter Styles */
+  .filter-container {
+    @apply sticky top-0 z-10 backdrop-blur-md bg-background/90 border-b border-border;
+  }
+  
+  .tag {
+    @apply text-xs font-medium py-0.5 px-2 rounded-full;
+  }
+  
+  .tag-electric {
+    @apply bg-blue-500/20 text-blue-300;
+  }
+  
+  .tag-hybrid {
+    @apply bg-green-500/20 text-green-300;
+  }
+  
+  .tag-negotiable {
+    @apply bg-amber-500/20 text-amber-300;
+  }
+}
+
+@layer components {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  
+  .btn-nav {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg transition-all 
+           hover:bg-secondary text-muted-foreground hover:text-foreground;
+  }
+  
+  .btn-nav.active {
+    @apply bg-primary/10 text-primary;
+  }
+  
+  .feature-icon {
+    @apply flex items-center gap-1 text-sm text-muted-foreground;
+  }
+}
