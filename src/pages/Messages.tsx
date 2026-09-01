@@ -172,53 +172,120 @@ const Messages = () => {
     setActiveConversation(conversation);
   };
   
-  const handleSendMessage = () => {
-    if (!messageInput.trim() || !activeConversation) return;
-    
-    // Create new message
-    const newMessage: Message = {
-      id: `m${new Date().getTime()}`,
-      content: messageInput,
+ const handleSendMessage = async () => {
+  if (!messageInput.trim() || !activeConversation) return;
+
+  const userMessageText = messageInput;
+
+  const newMessage: Message = {
+    id: `m${new Date().getTime()}`,
+    content: userMessageText,
+    time: "Just now",
+    sender: "user",
+    read: false
+  };
+
+  // Show user's message immediately
+  setConversations(prev =>
+    prev.map(conv =>
+      conv.id === activeConversation.id
+        ? {
+            ...conv,
+            lastMessage: userMessageText,
+            lastMessageTime: "Just now",
+            messages: [...conv.messages, newMessage]
+          }
+        : conv
+    )
+  );
+
+  setActiveConversation(prev =>
+    prev
+      ? {
+          ...prev,
+          lastMessage: userMessageText,
+          lastMessageTime: "Just now",
+          messages: [...prev.messages, newMessage]
+        }
+      : null
+  );
+
+  setMessageInput("");
+
+  try {
+    const response = await fetch(
+      "https://car-verse-0mwf.onrender.com/chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: userMessageText
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to get response");
+    }
+
+    const replyMessage: Message = {
+      id: `m${new Date().getTime() + 1}`,
+      content: data.response,
       time: "Just now",
-      sender: "user",
+      sender: "other",
       read: false
     };
-    
-    // Add message to conversation
-    const updatedConversations = conversations.map(conv => {
-      if (conv.id === activeConversation.id) {
-        return {
-          ...conv,
-          lastMessage: messageInput,
-          lastMessageTime: "Just now",
-          messages: [...conv.messages, newMessage]
-        };
-      }
-      return conv;
-    });
-    
-    setConversations(updatedConversations);
-    setActiveConversation(prev => {
-      if (!prev) return null;
-      return {
-        ...prev,
-        lastMessage: messageInput,
-        lastMessageTime: "Just now",
-        messages: [...prev.messages, newMessage]
-      };
-    });
-    setMessageInput("");
-    
-    // Simulate reply after delay
-    setTimeout(() => {
-      const replyContent = getAutoReply(activeConversation.id);
-      const replyMessage: Message = {
-        id: `m${new Date().getTime() + 1}`,
-        content: replyContent,
-        time: "Just now",
-        sender: "other",
-        read: false
-      };
+
+    // Add backend response
+    setConversations(prev =>
+      prev.map(conv =>
+        conv.id === activeConversation.id
+          ? {
+              ...conv,
+              lastMessage: data.response,
+              lastMessageTime: "Just now",
+              messages: [...conv.messages, replyMessage]
+            }
+          : conv
+      )
+    );
+
+    setActiveConversation(prev =>
+      prev
+        ? {
+            ...prev,
+            lastMessage: data.response,
+            lastMessageTime: "Just now",
+            messages: [...prev.messages, replyMessage]
+          }
+        : null
+    );
+
+  } catch (error) {
+    console.error("Chat API error:", error);
+
+    const errorMessage: Message = {
+      id: `m${new Date().getTime() + 2}`,
+      content: "Sorry, I couldn't connect to the chatbot.",
+      time: "Just now",
+      sender: "other",
+      read: false
+    };
+
+    setActiveConversation(prev =>
+      prev
+        ? {
+            ...prev,
+            messages: [...prev.messages, errorMessage]
+          }
+        : null
+    );
+  }
+};
       
       const updatedWithReply = conversations.map(conv => {
         if (conv.id === activeConversation.id) {
