@@ -130,7 +130,11 @@ def predict_price():
         return jsonify({'predicted_price': prediction})
     else:
         return jsonify({'error': 'Prediction failed'}), 500
-
+@app.route('/')
+def home():
+    return jsonify({
+        'message': 'Car-Verse backend is running!'
+    })
 @app.route('/chat', methods=['POST'])
 def chat():
     user_message = request.json.get('message', '')
