@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Welcome to your Car verse
 
 ## Project info
 
@@ -71,3 +71,4 @@ Yes it is!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+deployed https://car-verse-3.onrender.com
