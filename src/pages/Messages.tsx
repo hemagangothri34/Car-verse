@@ -314,18 +314,18 @@ const Messages = () => {
   };
   
   // Auto reply based on conversation
-  const getAutoReply = (conversationId: string): string => {
-    switch(conversationId) {
-      case "1":
-        return "Would you like to come by tomorrow for a test drive? We have availability in the morning.";
-      case "2":
-        return "Is there anything else you need for your upcoming BMW X1 rental?";
-      case "3":
-        return "We'll send you a reminder the day before your service appointment.";
-      default:
-        return "Thanks for your message. We'll get back to you soon.";
-    }
-  };
+  // const getAutoReply = (conversationId: string): string => {
+  //   switch(conversationId) {
+  //     case "1":
+  //       return "Would you like to come by tomorrow for a test drive? We have availability in the morning.";
+  //     case "2":
+  //       return "Is there anything else you need for your upcoming BMW X1 rental?";
+  //     case "3":
+  //       return "We'll send you a reminder the day before your service appointment.";
+  //     default:
+  //       return "Thanks for your message. We'll get back to you soon.";
+  //   }
+  // };
   
   // Filter conversations based on search query
   const filteredConversations = conversations.filter(conv => 
