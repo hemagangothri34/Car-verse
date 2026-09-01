@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Car, ShoppingBag, Settings, Calendar } from "lucide-react";
+import { Car, ShoppingBag, Settings, Calendar, Flame } from "lucide-react";
 import CarCard, { CarCardProps } from "@/components/CarCard";
 import FilterBar from "@/components/FilterBar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [recentCars, setRecentCars] = useState<CarCardProps[]>([]);
+  const [trendingCars, setTrendingCars] = useState<CarCardProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
   // Mock data for recently viewed cars
@@ -122,12 +123,67 @@ const Dashboard = () => {
       fuelType: "Diesel" as const
     }
   ];
+
+  // Mock data for trending cars
+  const mockTrendingCars = [
+    {
+      id: "t1",
+      image: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=600&auto=format&fit=crop",
+      model: "M4 Competition",
+      brand: "BMW",
+      type: "Coupe",
+      seats: 4,
+      transmission: "Automatic" as const,
+      price: 14000000, // ₹1.4 Cr
+      fuelType: "Petrol" as const,
+      year: 2023,
+      mileage: 4000,
+      isTrending: true,
+      trendingRank: 1,
+      viewsCount: "1.5k views today",
+      negotiable: true
+    },
+    {
+      id: "t2",
+      image: "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?q=80&w=600&auto=format&fit=crop",
+      model: "Defender 110",
+      brand: "Land Rover",
+      type: "SUV",
+      seats: 7,
+      transmission: "Automatic" as const,
+      price: 12000000, // ₹1.2 Cr
+      fuelType: "Diesel" as const,
+      year: 2022,
+      mileage: 10000,
+      isTrending: true,
+      trendingRank: 2,
+      viewsCount: "980 views today"
+    },
+    {
+      id: "t3",
+      image: "https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?q=80&w=600&auto=format&fit=crop",
+      model: "Mustang GT",
+      brand: "Ford",
+      type: "Coupe",
+      seats: 4,
+      transmission: "Manual" as const,
+      price: 8000000, // ₹80L
+      fuelType: "Petrol" as const,
+      year: 2021,
+      mileage: 12000,
+      isTrending: true,
+      trendingRank: 3,
+      viewsCount: "850 views today",
+      negotiable: true
+    }
+  ];
   
   useEffect(() => {
     // Simulate loading data
     const loadData = () => {
       setTimeout(() => {
         setRecentCars(mockRecentCars);
+        setTrendingCars(mockTrendingCars);
         setIsLoading(false);
       }, 1000);
     };
@@ -198,6 +254,38 @@ const Dashboard = () => {
       
       {/* Filter Bar */}
       <FilterBar showFuelType showPriceRange showSearch />
+      
+      {/* Trending Cars */}
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center gap-2">
+            <Flame className="h-6 w-6 text-rose-500 animate-pulse" />
+            <h2 className="text-2xl font-bold">Trending Right Now</h2>
+          </div>
+          <Button variant="link" onClick={() => navigate("/buy")}>
+            View All
+          </Button>
+        </div>
+        
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="aspect-[3/2] bg-secondary/50 rounded-lg animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {trendingCars.map((car) => (
+              <CarCard 
+                key={car.id} 
+                {...car} 
+                action="buy"
+                onAction={handleCarClick}
+              />
+            ))}
+          </div>
+        )}
+      </div>
       
       {/* Recently Viewed Cars */}
       <div>

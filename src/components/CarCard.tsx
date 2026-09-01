@@ -25,6 +25,9 @@ export interface CarCardProps {
   negotiable?: boolean;
   action?: "buy" | "rent" | "service" | "view";
   onAction?: (id: string) => void;
+  isTrending?: boolean;
+  trendingRank?: number;
+  viewsCount?: string;
 }
 
 const CarCard = ({
@@ -42,7 +45,10 @@ const CarCard = ({
   year,
   negotiable = false,
   action = "view",
-  onAction
+  onAction,
+  isTrending = false,
+  trendingRank,
+  viewsCount
 }: CarCardProps) => {
   
   // Helper function to format price correctly
@@ -92,14 +98,27 @@ const CarCard = ({
           className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
         />
         
-        {negotiable && (
-          <Badge className="absolute top-2 right-2 tag tag-negotiable">
-            Negotiable
-          </Badge>
+        <div className="absolute top-2 right-2 flex flex-col gap-1.5 items-end z-10">
+          {isTrending && (
+            <Badge className="bg-rose-600 text-white font-bold animate-pulse hover:bg-rose-700 border-none shadow-md text-[10px] sm:text-xs">
+              🔥 Trending {trendingRank && `#${trendingRank}`}
+            </Badge>
+          )}
+          {negotiable && (
+            <Badge className="tag tag-negotiable text-[10px] sm:text-xs">
+              Negotiable
+            </Badge>
+          )}
+        </div>
+        
+        {viewsCount && (
+          <div className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-xs text-[10px] text-white py-0.5 px-1.5 rounded-sm">
+            👁️ {viewsCount}
+          </div>
         )}
         
         {fuelType && (
-          <Badge className={`absolute top-2 left-2 tag ${fuelType === "Electric" ? "tag-electric" : fuelType === "Hybrid" ? "tag-hybrid" : "bg-muted"}`}>
+          <Badge className={`absolute top-2 left-2 tag ${fuelType === "Electric" ? "tag-electric" : fuelType === "Hybrid" ? "tag-hybrid" : "bg-muted/80 text-foreground border-none"}`}>
             {getFuelIcon()} {fuelType}
           </Badge>
         )}
